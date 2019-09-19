@@ -10,8 +10,8 @@ logger.setLevel(logging.INFO)
 
 def get_users_for_lang_and_location(lang, location, userdata):
     users = set()
-    for user,data in userdata.items():
-        if data['location'] == location and lang == data['lang']:
+    for user, data in userdata.items():
+        if data['location'] == location and lang in data['lang']:
             users.add(user)
     return users
 
@@ -63,12 +63,11 @@ def matcher_handler(event, context):
         locations = set()
         langs = set()
 
-
         for user, userdata in userdata_this_time.items():
             history_pairs = [ (user,i) for i in userdata['history'] ]
             history.extend(history_pairs)
             locations.add(userdata['location'])
-            langs.add(userdata['lang'])
+            langs.update(userdata['lang'])
         clear_history = list({frozenset(c) for c in history})
 
         matching = []
