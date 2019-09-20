@@ -129,12 +129,12 @@ def matcher_handler(event, context):
                 if item[0] in matched_users or item[1] in matched_users:
                     pass
                 else:
-                    matching.append(item)
-                    matched_users.add(item[0])
-                    matched_users.add(item[1])
+                    matching.append((str(item[0]),str(item[1])))
+                    matched_users.add(str(item[0]))
+                    matched_users.add(str(item[1]))
 
             #need this for remote_coffee
-            unmatched_users = set(users).difference(set(matched_users))
+            unmatched_users = set(users) - set(matched_users)
             unmatched_users_by_location_and_lang_for_remote.extend(list(unmatched_users))
 
             remote_users = []
@@ -148,15 +148,15 @@ def matcher_handler(event, context):
                 if item[0] in matched_users or item[1] in matched_users:
                     pass
                 else:
-                    matching.append(item)
-                    matched_users.add(item[0])
-                    matched_users.add(item[1])
+                    matching.append((str(item[0]),str(item[1])))
+                    matched_users.add(str(item[0]))
+                    matched_users.add(str(item[1]))
 
             print(matching)
 
-
         result = {
-            "result": "OK"
+            "result": "OK",
+            "matched": matching
         }
 
     logging.info("@@##==================NEW MATCHES=======================================")
