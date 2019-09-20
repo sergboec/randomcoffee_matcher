@@ -126,7 +126,7 @@ def matcher_handler(event, context):
 
             matched_users = set()
             for item in pairs_by_interests:
-                if item[0] in matched_users or item[1] in matched_users:
+                if str(item[0]) in matched_users or str(item[1]) in matched_users:
                     pass
                 else:
                     matching.append((str(item[0]),str(item[1])))
@@ -143,7 +143,7 @@ def matcher_handler(event, context):
                     remote_users.append(user)
 
             remote_combinations = combinate_users_with_respect_interests_and_history(remote_users, clear_history, userdata_this_time)
-            matched_users = set()
+
             for item in remote_combinations:
                 if item[0] in matched_users or item[1] in matched_users:
                     pass
@@ -152,7 +152,7 @@ def matcher_handler(event, context):
                     matched_users.add(str(item[0]))
                     matched_users.add(str(item[1]))
 
-            print(matching)
+
 
         result = {
             "result": "OK",
@@ -175,6 +175,6 @@ def combinate_users_with_respect_interests_and_history(users, clear_history, use
             user_for_interests[interest].append(user)
     capacities = {hosp: 2 for hosp in user_for_interests}
     game = HospitalResident.create_from_dictionaries(user_prefs, user_for_interests, capacities)
-    pairs_by_interests = [tuple(x) for x in game.solve().values() if len(tuple(x)) == 2]
+    pairs_by_interests = [tuple(x) for x in game.solve(optimal="hospital").values() if len(tuple(x)) == 2]
     combinations_without_history = set(pairs_by_interests) - set(clear_history)
     return combinations_without_history
